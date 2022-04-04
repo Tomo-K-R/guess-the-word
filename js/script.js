@@ -4,6 +4,8 @@ const guessedLettersElement = document.querySelector(".guessed-letters");
 const guessButton = document.querySelector(".guess");
 // The text input where the player will guess a letter.
 const letterInput = document.querySelector(".letter");
+// The label for the text input where the player will guess a letter.
+const labelForLetterInput = document.querySelector(".label-for-letter");
 // The empty paragraph where the word in progress will appear.
 const wordInProgress = document.querySelector(".word-in-progress");
 // The paragraph where the remaining guesses will display.
@@ -134,7 +136,7 @@ const countRemainingGuesses = function(guess){
     };
     if (remainingGuesses === 0){
         message.innerHTML= `No more guesses left. The game is over. :( The word was <span class="highlight">${word}</span>.`;
-        remainingElement.innerText = "";
+        startOver();
     } else if (remainingGuesses === 1){
         remainingSpan.innerText = `${remainingGuesses} guess`;
     } else if (remainingGuesses > 1) {
@@ -147,5 +149,53 @@ const checkIfWin = function(){
     if (wordInProgress.innerText === word.toUpperCase()) {
         message.classList.add("win");
         message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`
+        startOver();
     };
 };
+
+// Create a Function to Hide and Show Elements
+const startOver = function(){
+    // hide the Guess button.
+    guessButton.classList.add("hide");
+    // hide the paragraph where the remaining guesses will display.
+    remainingElement.classList.add("hide");
+    // hide the unordered list where the guessed letters appear. 
+    guessedLettersElement.classList.add("hide");
+    // hide the text input where the player guesses a letter.
+    letterInput.classList.add("hide");
+    // hide the label for the text input where the player guesses a letter.
+    labelForLetterInput.classList.add("hide");
+    // show the button to play again.
+    playAgainButton.classList.remove("hide");
+};
+
+// Add a Click Event to the Play Again Button
+playAgainButton.addEventListener("click", function(e){
+    // The preventDefault() method cancels the event if it is cancelable, meaning that the default action that belongs to the event will not occur.
+    e.preventDefault();
+    // Remove the class of “win” applied to the message element.
+    message.classList.remove("win");
+    // Empty the message text and the unordered list where the guessed letters appear.
+    message.innerText = "";
+    guessedLettersElement.innerHTML = "";
+    // Set the remaining guess back to 8
+    remainingGuesses = 8;
+    // Set guessedLetters global variable back to an empty array.
+    guessedLetters.length = 0;
+    // Populate the text of the span inside the paragraph where the remaining guesses display with the new amount of guesses.
+    remainingSpan.innerText = `${remainingGuesses} guesses`
+    // Show the Guess button
+    guessButton.classList.remove("hide");
+    // Show the paragraph with remaining guesses
+    remainingElement.classList.remove("hide");
+    // Show the guessed letters
+    guessedLettersElement.classList.remove("hide");
+    // Show the text input where the player guesses a letter.
+    letterInput.classList.remove("hide");
+    // Show the label for the text input where the player guesses a letter.
+    labelForLetterInput.classList.remove("hide");
+    // Hide the Play Again button.
+    playAgainButton.classList.add("hide");
+    // Call the getWord() async function that pulls the new word so the player can play again!
+    getWord();
+});
